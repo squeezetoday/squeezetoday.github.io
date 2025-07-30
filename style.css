@@ -1,52 +1,80 @@
+/* ================================
+   GLOBAL VARIABLES
+================================ */
+:root {
+  --primary-color: #de6581;
+  --secondary-color: #9568da;
+  --neutral-light: #f9f8f6;
+  --neutral-dark: #666;
+  --accent-gray: #aeaca8;
+  --bg-light: #fff8f5;
+  --font-main: Georgia, Times, serif;
+}
+
+/* ================================
+   BASE STYLES
+================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  color: var(--neutral-dark);
+  background-color: var(--neutral-light);
+  line-height: 1.4em;
+}
+
 header, section, footer, aside, nav, article, figure, figcaption {
   display: block;
 }
 
-body {
-  color: #666;
-  background-color: #f9f8f6;
-  background-position: center;
-  font-family: Georgia, Times, serif;
-  line-height: 1.4em;
-  margin: 0;
-}
-
+/* ================================
+   LAYOUT WRAPPER
+================================ */
 .wrapper {
-  width: 100%;
+  max-width: 1200px;
   margin: 20px auto;
   background-color: #fff;
-  border: none;
 }
 
+/* ================================
+   HEADER
+================================ */
 header {
   height: 160px;
   padding: 20px;
-  background-color: #fff8f5;
+  background-color: var(--bg-light);
 }
 
 h1 {
-  color: #de6581;
-  font-size: 2.5em;
+  color: var(--primary-color);
+  font-size: clamp(2em, 5vw, 2.5em);
   margin: 0;
-  padding: 0;
 }
 
 .tagline {
-  color: #aeaca8;
+  color: var(--accent-gray);
   font-style: italic;
   margin-top: 5px;
 }
 
+/* ================================
+   NAVIGATION
+================================ */
 nav, footer {
   clear: both;
   color: #fff;
-  background-color: #aeaca8;
+  background-color: var(--accent-gray);
   height: 30px;
 }
 
 nav ul {
   margin: 0;
   padding: 5px 0 5px 30px;
+  list-style: none;
 }
 
 nav li {
@@ -54,32 +82,41 @@ nav li {
   margin-right: 40px;
 }
 
-nav li a {
+nav a {
   color: #fff;
+  text-decoration: none;
 }
 
-nav li a:hover, nav li a.current {
+nav a:hover,
+nav a.current {
   color: #000;
 }
 
-main.content-area::after {
-  content: "";
-  display: table;
-  clear: both;
+nav a:focus {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 2px;
 }
 
-section.courses {
-  float: left;
-  width: 659px;
-  border-right: 1px solid #eee;
+/* ================================
+   MAIN CONTENT AREA
+================================ */
+main.content-area {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
   padding: 0 20px;
 }
 
+section.courses {
+  flex: 2;
+  border-right: 1px solid #eee;
+  padding: 20px 0;
+}
+
 article {
-  clear: both;
-  overflow: auto;
   width: 100%;
   margin-bottom: 20px;
+  overflow: hidden;
   transition: background-color 0.3s;
 }
 
@@ -102,7 +139,7 @@ figure {
 }
 
 figure:hover {
-  border-color: #de6581;
+  border-color: var(--primary-color);
 }
 
 figcaption {
@@ -110,26 +147,47 @@ figcaption {
   text-align: left;
 }
 
+/* ================================
+   SIDEBAR
+================================ */
 aside {
-  width: 230px;
-  float: left;
-  padding: 0 0 0 20px;
+  flex: 1;
+  padding: 20px 0 0 20px;
 }
 
 aside section a {
   display: block;
   padding: 10px;
   border-bottom: 1px solid #eee;
+  text-decoration: none;
+  color: inherit;
 }
 
 aside section a:hover {
-  color: #9568da;
+  color: var(--secondary-color);
   background-color: #efefef;
 }
 
+aside section a:focus {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 2px;
+}
+
+/* ================================
+   TYPOGRAPHY
+================================ */
 a {
-  color: #de6581;
+  color: var(--primary-color);
   text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:focus {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 2px;
 }
 
 h1, h2, h3 {
@@ -143,34 +201,46 @@ h2 {
 
 h3 {
   font-size: 1.3em;
-  color: #9568da;
+  color: var(--secondary-color);
   margin: 0 0 10px 0;
 }
 
 aside h2 {
   padding: 30px 0 10px 0;
-  color: #de6581;
+  color: var(--primary-color);
 }
 
+/* ================================
+   BUTTONS
+================================ */
 .button {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #de6581;
+  background-color: var(--primary-color);
   color: #fff;
   border-radius: 4px;
   margin: 20px 0;
   text-align: center;
+  transition: background-color 0.3s;
 }
 
-.button:hover {
-  background-color: #9568da;
+.button:hover,
+.button:focus {
+  background-color: var(--secondary-color);
+  outline: none;
 }
 
+/* ================================
+   FOOTER
+================================ */
 footer {
   font-size: 80%;
   padding: 7px 0 0 20px;
 }
 
+/* ================================
+   NEWSLETTER SECTION
+================================ */
 .newsletter {
   background-color: #f3f3f3;
   padding: 20px;
@@ -183,14 +253,17 @@ footer {
   padding: 10px;
   font-size: 1em;
   margin-top: 10px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
 }
 
+/* ================================
+   MEDIA QUERIES
+================================ */
 @media (max-width: 768px) {
-  section.courses,
-  aside {
-    float: none;
-    width: 100%;
-    padding: 10px;
+  main.content-area {
+    flex-direction: column;
   }
 
   nav ul {
@@ -200,6 +273,15 @@ footer {
   nav li {
     display: block;
     margin-bottom: 10px;
+  }
+
+  figure {
+    float: none;
+    margin: 10px auto;
+  }
+
+  .button {
+    width: 100%;
   }
 }
 
