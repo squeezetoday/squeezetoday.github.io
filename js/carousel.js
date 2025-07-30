@@ -1,190 +1,216 @@
 class AdCarousel extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: 'open' });
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
 
-      this.shadowRoot.innerHTML = `
-        <style>
-          :host {
-            display: block;
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            height: 250px;
-            overflow: hidden;
-            border-radius: 10px;
-            border: 2px solid #ccc;
-            box-sizing: border-box;
-            font-family: sans-serif;
-          }
-          .track {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.5s ease-in-out;
-          }
-          ::slotted(div) {
-            flex: 0 0 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            background: #f4f4f4;
-            box-sizing: border-box;
-            padding: 1em;
-            user-select: none;
-          }
-          .nav {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-            pointer-events: none;
-          }
-          button {
-            background: rgba(0, 0, 0, 0.4);
-            color: white;
-            border: none;
-            font-size: 2rem;
-            cursor: pointer;
-            padding: 0.2em 0.6em;
-            pointer-events: auto;
-            transition: background 0.3s;
-            user-select: none;
-          }
-          button:hover {
-            background: rgba(0, 0, 0, 0.6);
-          }
-          .dots {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 0.5rem;
-          }
-          .dot {
-            width: 12px;
-            height: 12px;
-            background: #ccc;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background 0.3s;
-            user-select: none;
-          }
-          .dot.active {
-            background: #333;
-          }
-        </style>
-        <div class="track">
-          <slot></slot>
-        </div>
-        <div class="nav">
-          <button class="prev"><</button>
-          <button class="next">></button>
-        </div>
-        <div class="dots"></div>
-      `;
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host {
+          display: block;
+          position: relative;
+          width: 100%;
+          max-width: 600px;
+          height: 250px;
+          overflow: hidden;
+          border-radius: 10px;
+          border: 2px solid #ccc;
+          box-sizing: border-box;
+          font-family: sans-serif;
+        }
 
-      this._track = this.shadowRoot.querySelector('.track');
-      this._slot = this.shadowRoot.querySelector('slot');
-      this._prevBtn = this.shadowRoot.querySelector('.prev');
-      this._nextBtn = this.shadowRoot.querySelector('.next');
-      this._dotsContainer = this.shadowRoot.querySelector('.dots');
+        .track {
+          display: flex;
+          transition: transform 0.5s ease-in-out;
+          height: 100%;
+        }
 
-      this._currentIndex = 0;
-      this._intervalId = null;
-    }
+        .slide {
+          flex: 0 0 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 2em;
+          box-sizing: border-box;
+          padding: 1em;
+        }
 
-    connectedCallback() {
-      requestAnimationFrame(() => {
-        this._updateSlides();
-        this._setupEvents();
-        this._startAutoSlide();
-      });
-    }
+        .nav {
+          position: absolute;
+          top: 50%;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          transform: translateY(-50%);
+          pointer-events: none;
+        }
 
-    disconnectedCallback() {
-      this._stopAutoSlide();
-    }
+        button {
+          background: rgba(0, 0, 0, 0.4);
+          color: white;
+          border: none;
+          font-size: 2rem;
+          cursor: pointer;
+          padding: 0.2em 0.6em;
+          pointer-events: auto;
+          transition: background 0.3s;
+        }
 
-    _updateSlides() {
-      this._slides = this._slot.assignedElements().filter(el => el.nodeType === 1);
-      this._slideCount = this._slides.length;
+        button:hover {
+          background: rgba(0, 0, 0, 0.6);
+        }
 
-      this._track.style.transform = 'translateX(0)';
-      this._dotsContainer.innerHTML = '';
+        .dots {
+          position: absolute;
+          bottom: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 0.5rem;
+        }
 
-      this._dots = [];
+        .dot {
+          width: 12px;
+          height: 12px;
+          background: #ccc;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: background 0.3s;
+        }
 
-      for (let i = 0; i < this._slideCount; i++) {
-        const dot = document.createElement('div');
-        dot.classList.add('dot');
-        if (i === 0) dot.classList.add('active');
-        dot.addEventListener('click', () => {
-          this._goToSlide(i);
-          this._resetAutoSlide();
-        });
-        this._dotsContainer.appendChild(dot);
-        this._dots.push(dot);
-      }
-    }
+        .dot.active {
+          background: #333;
+        }
+      </style>
+      <div class="track"></div>
+      <div class="nav">
+        <button class="prev">&lt;</button>
+        <button class="next">&gt;</button>
+      </div>
+      <div class="dots"></div>
+    `;
 
-    _setupEvents() {
-      this._prevBtn.addEventListener('click', () => {
-        this._goToSlide(this._currentIndex - 1);
+    this.track = this.shadowRoot.querySelector(".track");
+    this.prevBtn = this.shadowRoot.querySelector(".prev");
+    this.nextBtn = this.shadowRoot.querySelector(".next");
+    this.dotsContainer = this.shadowRoot.querySelector(".dots");
+    this.interval = parseInt(this.getAttribute("interval") || 4000, 10);
+
+    this.currentIndex = 0;
+    this.intervalId = null;
+    this.realSlides = [];
+  }
+
+  connectedCallback() {
+    const children = Array.from(this.children);
+    this.realSlideCount = children.length;
+
+    // Move light DOM children into shadow DOM
+    this.realSlides = children.map(child => {
+      const slide = document.createElement("div");
+      slide.classList.add("slide");
+      slide.appendChild(child.cloneNode(true));
+      this.track.appendChild(slide);
+      return slide;
+    });
+
+    // Add a cloned first slide at the end for seamless looping
+    const firstClone = this.realSlides[0].cloneNode(true);
+    this.track.appendChild(firstClone);
+    this.slides = [...this.realSlides, firstClone];
+
+    // Remove original light DOM
+    this.innerHTML = "";
+
+    this._createDots();
+    this._updateDots(0);
+    this._goTo(0, false);
+
+    this.prevBtn.addEventListener("click", () => {
+      this._goTo(this.currentIndex - 1);
+      this._resetAutoSlide();
+    });
+
+    this.nextBtn.addEventListener("click", () => {
+      this._goTo(this.currentIndex + 1);
+      this._resetAutoSlide();
+    });
+
+    this.addEventListener("mouseenter", () => this._stopAutoSlide());
+    this.addEventListener("mouseleave", () => this._startAutoSlide());
+
+    this._startAutoSlide();
+  }
+
+  disconnectedCallback() {
+    this._stopAutoSlide();
+  }
+
+  _createDots() {
+    this.dots = [];
+    this.dotsContainer.innerHTML = "";
+
+    for (let i = 0; i < this.realSlideCount; i++) {
+      const dot = document.createElement("div");
+      dot.className = "dot";
+      dot.addEventListener("click", () => {
+        this._goTo(i);
         this._resetAutoSlide();
       });
-
-      this._nextBtn.addEventListener('click', () => {
-        this._goToSlide(this._currentIndex + 1);
-        this._resetAutoSlide();
-      });
-
-      this.addEventListener('mouseenter', () => this._stopAutoSlide());
-      this.addEventListener('mouseleave', () => this._startAutoSlide());
-
-      this._slot.addEventListener('slotchange', () => {
-        this._updateSlides();
-        this._goToSlide(0);
-      });
-    }
-
-    _goToSlide(index) {
-      if (this._slideCount === 0) return;
-
-      this._currentIndex = (index + this._slideCount) % this._slideCount;
-      this._track.style.transform = `translateX(-${this._currentIndex * 100}%)`;
-
-      this._dots.forEach(dot => dot.classList.remove('active'));
-      if (this._dots[this._currentIndex]) {
-        this._dots[this._currentIndex].classList.add('active');
-      }
-    }
-
-    _startAutoSlide() {
-      if (this._intervalId || this._slideCount <= 1) return;
-
-      const interval = parseInt(this.getAttribute('interval')) || 4000;
-      this._intervalId = setInterval(() => {
-        this._goToSlide(this._currentIndex + 1);
-      }, interval);
-    }
-
-    _stopAutoSlide() {
-      clearInterval(this._intervalId);
-      this._intervalId = null;
-    }
-
-    _resetAutoSlide() {
-      this._stopAutoSlide();
-      this._startAutoSlide();
+      this.dotsContainer.appendChild(dot);
+      this.dots.push(dot);
     }
   }
 
-  customElements.define('ad-carousel', AdCarousel);
+  _updateDots(index) {
+    this.dots.forEach(dot => dot.classList.remove("active"));
+    if (this.dots[index]) this.dots[index].classList.add("active");
+  }
+
+  _goTo(index, animate = true) {
+    const maxIndex = this.slides.length - 1;
+
+    if (animate) {
+      this.track.style.transition = "transform 0.5s ease-in-out";
+    } else {
+      this.track.style.transition = "none";
+    }
+
+    this.currentIndex = index;
+    this.track.style.transform = `translateX(-${index * 100}%)`;
+
+    // If we're going to the cloned last slide, schedule a jump
+    if (index === this.slides.length - 1) {
+      this._updateDots(0); // Show first dot
+      this.track.addEventListener("transitionend", () => {
+        this.track.style.transition = "none";
+        this.track.style.transform = "translateX(0)";
+        this.currentIndex = 0;
+      }, { once: true });
+    } else {
+      this._updateDots(index);
+    }
+  }
+
+  _startAutoSlide() {
+    if (this.intervalId || this.realSlideCount <= 1) return;
+    this.intervalId = setInterval(() => {
+      this._goTo(this.currentIndex + 1);
+    }, this.interval);
+  }
+
+  _stopAutoSlide() {
+    clearInterval(this.intervalId);
+    this.intervalId = null;
+  }
+
+  _resetAutoSlide() {
+    this._stopAutoSlide();
+    this._startAutoSlide();
+  }
+}
+
+customElements.define("ad-carousel", AdCarousel);
+
 /* how to use <ad-carousel>:
 <ad-carousel interval="5000" style="max-width: 500px; height: 500px;">
   <div> <p>Ad 1 text</p> </div>
