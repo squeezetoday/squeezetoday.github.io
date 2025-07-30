@@ -1,68 +1,97 @@
-<!-- first commit(!) -->
-<!-- fake japanese food website to test if the page works -->
-
 <!DOCTYPE html>
 <html>
-        <head>
-                <title> Squeeze Today -- Fresh Lemonade </title>
-                <link rel="stylesheet" href="style.css">
-        </head>
-        <body>
-                <div class="wrapper">
-                        <header>
-                                <h1>Lemonade website demo</h1>
-                                <nav>
-                                        <ul>
-                                                <li><a href="" class="current">home</a></li>
-                                                <li><a href="">book us</a></li>
-                                                <li><a href="">TODO: more stuff here</a></li>
-                                                <li><a href="">More TODO</a></li>
-                                                <li><a href="">5 lines here = good</a></li>
-                                        </ul>
-                                </nav>
-                        </header>
-                        <section class="courses">
-                                <article>
-                                        <figure>
-                                                <img src="images/featured_article_1_image.jpg" alt="featured article 1 image" />
-                                                <figcaption>featured article 1 image</figcaption>
-                                        </figure>
-                                        <hgroup>
-                                                <h2>featured article 1 title</h2>
-                                                <h3>featured article 1 subtitle</h3>
-                                        </hgroup>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation...</p>
-                                </article>
-                                <article>
-                                        <figure>
-                                                <img src="images/featured_article_2_image.jpg" alt="featured article 2 image" />
-                                                <figcaption>featured article 2 image</figcaption>
-                                        </figure>
-                                        <hgroup>
-                                                <h2>featured article 2 title</h2>
-                                                <h3>featured article 2 subtitle</h3>
-                                        </hgroup>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation...</p>
-                                </article>
-                        </section>
-                        <aside>
-                                <section class="popular-recipes">
-                                        <h2>All-new lemonade flavors!!!</h2>
-                                        <a href="">Lemonade type A</a>
-                                        <a href="">Lemonade type B</a>
-                                        <a href="">Lemonade type C</a>
-                                        <a href="">Lemonade type D</a>
-                                </section>
-                                <section class="contact-details">
-                                        <h2>Contact</h2>
-                                        <p>My Buisness Name<br />
-                                        My Buisness location<br />
-                                        My Buisness location 2nd line</p>
-                                </section>
-                        </aside>
-                        <footer>
-                                &copy; 2025 Squeeze Today Lemonade Co.
-                        </footer>
-                </div> <!-- .wrapper -->
-        </body>
+<head>
+  <meta charset="UTF-8">
+  <title>Squeeze Today — Fresh Lemonade</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>Squeeze Today</h1>
+      <p class="tagline">Fresh Lemonade, Every Day</p>
+      <nav>
+        <ul>
+          <li><a href="index.html" class="current">Home</a></li>
+          <li><a href="book.html">Book Us</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="content-area">
+      <section class="courses">
+        <article>
+          <figure>
+            <img src="images/lemonade1.jpg" alt="Hibiscus Lemonade" />
+            <figcaption>Hibiscus Lemonade</figcaption>
+          </figure>
+          <hgroup>
+            <h2>Try Our New Sparkling Hibiscus Lemonade</h2>
+            <h3>Refreshing. Floral. All natural.</h3>
+          </hgroup>
+          <p>Crafted with real hibiscus flowers and organic lemons, this sparkling lemonade offers a tangy twist for summer. Available now at all stands and pop-up events.</p>
+        </article>
+
+        <article>
+          <figure>
+            <img src="images/lemonade2.jpg" alt="Behind the Scenes" />
+            <figcaption>Fresh Lemons, Fresh Stories</figcaption>
+          </figure>
+          <hgroup>
+            <h2>Behind the Scenes</h2>
+            <h3>How We Source Our Citrus</h3>
+          </hgroup>
+          <p>We work directly with local growers to ensure the juiciest, most flavorful lemons in every batch. Learn more about our ingredients and what makes us squeeze with care.</p>
+        </article>
+
+        <article>
+          <hgroup>
+            <h2>Our Story</h2>
+            <h3>From Kitchen Experiments to Community Favorite</h3>
+          </hgroup>
+          <p>We started Squeeze Today with fresh fruit, a blender, and a dream. Today, we're serving up small-batch seasonal flavors with bold personality and love in every cup.</p>
+        </article>
+
+        <a href="book.html" class="button">Book Us for Your Event</a>
+      </section>
+
+      <aside>
+        <section class="flavors">
+          <h2>Try These:</h2>
+          <a href="#"><span>🍋</span> Classic Lemon</a>
+          <a href="#"><span>🌸</span> Lavender Breeze</a>
+          <a href="#"><span>🍓</span> Strawberry Zing</a>
+          <a href="#"><span>🌶️</span> Ginger Spice</a>
+        </section>
+
+        <section class="contact-details">
+          <h2>Contact</h2>
+          <p>
+            Squeeze Today Lemonade Co.<br>
+            123 Citrus Lane<br>
+            Lemon Grove, CA 90210<br>
+            <strong>Email:</strong> hello@squeezetoday.com<br>
+            <strong>Phone:</strong> (555) 123-4567
+          </p>
+        </section>
+      </aside>
+    </main>
+
+    <section class="newsletter">
+      <h2>Stay Squeezed In!</h2>
+      <p>Sign up for updates on new flavors, events, and discounts.</p>
+      <form>
+        <input type="email" placeholder="Your email address" />
+        <button type="submit">Subscribe</button>
+      </form>
+    </section>
+
+    <footer>
+      &copy; 2025 Squeeze Today Lemonade Co.
+    </footer>
+  </div>
+</body>
 </html>
